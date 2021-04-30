@@ -10,8 +10,8 @@ from sklearn.preprocessing import OneHotEncoder
 # Neural Netwrok libraries
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense
+#from tensorflow.keras import Sequential
+#from tensorflow.keras.layers import Dense
 
 # Creating std scaler
 sc = StandardScaler()
