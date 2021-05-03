@@ -1,4 +1,3 @@
-#import uvicorn
 from fastapi import FastAPI
 
 # Code for creating the model of the API
@@ -43,6 +42,9 @@ def convert(dati_preparati, lista):
 
 app = FastAPI()
 
+@app.get("/")
+def home():
+    return {"message":"Hello World!"}
 
 @app.post("/prediciton")
 def get_prediction():
@@ -52,5 +54,3 @@ def get_prediction():
     return prediction_label
 
 
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="127.0.0.1", port=5049)
