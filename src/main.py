@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 
 # Code for creating the model of the API
@@ -52,5 +53,8 @@ def get_prediction():
     prediction_heart = predict(dati_preparati)
     prediction_label = convert(prediction_heart, pred_label)
     return prediction_label
+
+if __name__ == '__main__':
+    uvicorn.run(app, host='127.0.0.1', port=8000)    
 
 
