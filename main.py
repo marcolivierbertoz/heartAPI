@@ -48,8 +48,8 @@ def home():
     return {"message":"Hello World!"}
 
 @app.post("/prediciton")
-def get_prediction():
-    dati_preparati = preparazione(Dati)
+def get_prediction(data: Data):
+    dati_preparati = preparazione(Data)
     prediction_heart = predict(dati_preparati)
     prediction_label = convert(prediction_heart, pred_label)
     return prediction_label
