@@ -45,11 +45,11 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {"message":"Hello World!"}
+    return {"message":"Welcome to my first API!"}
 
-@app.post("/prediciton")
-async def get_prediction(data: Data):
-    input_df = pd.DataFrame([data.dict()])
+@app.post("/prediction")
+async def get_prediction():
+    #input_df = pd.DataFrame([data.dict()])
     dati_preparati = preparazione(input_df)
     prediction_heart = predict(dati_preparati)
     prediction_label = convert(prediction_heart, pred_label)
