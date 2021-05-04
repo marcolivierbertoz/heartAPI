@@ -48,8 +48,9 @@ def home():
     return {"message":"Hello World!"}
 
 @app.post("/prediciton")
-def get_prediction():
-    dati_preparati = preparazione(data)
+async def get_prediction(data: Data):
+    input_df = pd.DataFrame([data.dict()])
+    dati_preparati = preparazione(input_df)
     prediction_heart = predict(dati_preparati)
     prediction_label = convert(prediction_heart, pred_label)
     return prediction_label
