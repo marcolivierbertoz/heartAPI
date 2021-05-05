@@ -1,6 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 
+# Downlaoding encoder
+from fastapi.encoders import jsonable_encoder
+
 # Download basic ML model for creating class
 from pydantic import BaseModel
 
@@ -67,9 +70,9 @@ def home():
 
 @app.post("/prediction")
 async def get_prediction(heart :Heart):
-    input_df = pd.DataFrame(heart)
+    #input_df = pd.DataFrame(heart)
     # input_df = pd.DataFrame([heart.dict()])
-    dati_preparati = preparazione(input_df)
+    dati_preparati = preparazione(heart)
     prediction_heart = predict(dati_preparati)
     prediction_label = convert(prediction_heart, pred_label)
     return prediction_label
