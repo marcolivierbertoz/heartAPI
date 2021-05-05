@@ -1,6 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 
+# Download basic ML model for creating class
+from pydantic import BaseModel
+
 # Code for creating the model of the API
 import numpy as np
 import pandas as pd
@@ -13,6 +16,21 @@ import tensorflow as tf
 from tensorflow import keras
 #from tensorflow.keras import Sequential
 #from tensorflow.keras.layers import Dense
+
+
+# Creating class for validation
+class Heart(BaseModel):
+    age: float
+    anemia: int
+    cpk: int
+    diabetes: int
+    eject_fraction: int
+    high_blood_pressure: int
+    platelets: float
+    serum_creatinine: float
+    serum_sodium: int
+    sex: int
+    time: int
 
 # Creating std scaler
 sc = StandardScaler()
@@ -48,8 +66,8 @@ def home():
     return {"message":"Welcome to my first API!"}
 
 @app.post("/prediction")
-async def get_prediction():
-    #input_df = pd.DataFrame([data.dict()])
+async def get_prediction(heart :Heart):
+    input_df = pd.DataFrame([heart.dict()])
     dati_preparati = preparazione(input_df)
     prediction_heart = predict(dati_preparati)
     prediction_label = convert(prediction_heart, pred_label)
