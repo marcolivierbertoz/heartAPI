@@ -70,9 +70,14 @@ def home():
 
 @app.post("/prediction")
 async def get_prediction(heart :Heart):
+    heart_direct = jsonable_encoder(heart)
+    for key, value in heart_direct.items():
+        heart_direct[key] = [value]
+
+    input_df = pd.DataFrame.from_dict(heart_direct)    
     #input_df = pd.DataFrame(heart)
     # input_df = pd.DataFrame([heart.dict()])
-    dati_preparati = preparazione(heart)
+    dati_preparati = preparazione(input_df)
     prediction_heart = predict(dati_preparati)
     prediction_label = convert(prediction_heart, pred_label)
     return prediction_label
