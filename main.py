@@ -37,9 +37,8 @@ class Heart(BaseModel):
 sc = StandardScaler()
 
 # Loading the model saved
-url = "https://github.com/marcolivierbertoz/heartAPI/blob/main/Test_model_Neural_Network"
 
-model = keras.models.load_model(url)
+model = keras.models.load_model("Test_model_Neural_Network")
 
 # List for prediction
 pred_label = list()
