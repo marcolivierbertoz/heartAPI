@@ -69,7 +69,11 @@ def home():
 
 @app.post("/prediction")
 async def get_prediction(heart :Heart):
-    input_df = pd.DataFrame(heart)
+    data = heart.dict()
+    data_in = [[data['Age'], data['Anemia'], data['CPK'], data['Diabetes'], data['Ejection_fraction'], data['HBP'], data['Platelets'], data['Serum_Creatinine'], data['Serum_Sodium'], data['Woman_Man'], data['Time']
+    ]]
+
+    input_df = pd.DataFrame(data_in)
     # input_df = pd.DataFrame([heart.dict()])
     dati_preparati = preparazione(input_df)
     prediction_heart = predict(dati_preparati)
