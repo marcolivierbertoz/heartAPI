@@ -21,23 +21,25 @@ from tensorflow import keras
 
 # Creating class for validation
 class Heart(BaseModel):
-    age: float
-    anemia: int
-    cpk: int
-    diabetes: int
-    eject_fraction: int
-    high_blood_pressure: int
-    platelets: float
-    serum_creatinine: float
-    serum_sodium: int
-    sex: int
-    time: int
+    Age: float
+    Anemia: int
+    CPK: int
+    Diabetes: int
+    Ejection_fraction: int
+    HBP: int
+    Platelets: float
+    Serum_Creatinine: float
+    Serum_Sodium: int
+    Woman_Man: int
+    Time: int
 
 # Creating std scaler
 sc = StandardScaler()
 
 # Loading the model saved
-model = keras.models.load_model("Test_model_Neural_Network")
+url = "https://github.com/marcolivierbertoz/heartAPI/blob/main/Test_model_Neural_Network"
+
+model = keras.models.load_model(url)
 
 # List for prediction
 pred_label = list()
