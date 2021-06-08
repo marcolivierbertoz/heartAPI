@@ -1,25 +1,83 @@
+# New Version of the API, this time with training the model
+# and not loading it.
+# Model used is the K-NN, not anymore the Tensorflow
+# There will be only training, not testng the model
+# The aim of the API is to learn how to create and use one, not creating a perfect model for predicting
+
+
+
+# Importing packages ##############################################################################
+# FastAPI for creating API
 import uvicorn
 from fastapi import FastAPI
 
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-# Download basic ML model for creating class
-from pydantic import BaseModel
-
-# Code for creating the model of the API
+# Python Package
 import numpy as np
 import pandas as pd
 
+# Download basic ML model for creating class
+from pydantic import BaseModel
+
+# Sci-kit Learn Packages, for creating Machine Learning models ######
+# Package for standardizing
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
 
-# Neural Netwrok libraries
-import tensorflow as tf
-from tensorflow import keras
-#from tensorflow.keras import Sequential
-#from tensorflow.keras.layers import Dense
+# Train Test Split
+# from sklearn.model_selection import train_test_split
 
+# Model K-NN
+from sklearn.neighbors import KNeighborsClassifier
+
+#####################################################################################################
+
+# Model training ##############################################################################
+
+# Loading data
+heart_original = pd.read_csv('heart_failure_clinical_records_dataset.csv')
+
+# Retrving the FEatures and Target
+X_features = heart_original.iloc[:,:12].values
+y_target = heart_original.iloc[:,12:13].values
+
+# Normalizing the data
+sc = StandardScaler()
+One_Hot = OneHotEncoder()
+
+X_features_normalized = sc.fit_transform(X_features)
+
+y_target_encoded = One_Hot.fit_transform(y_target).toarray()
+# Creating the model
+knn = KNeighborsClassifier(n_neighbors=10, algorithm='brute', n_jobs=-1)
+
+# Training the model
+knn.fit(X_features_normalized,y_target_encoded)
+
+
+#################################################################################################
+
+# Defining fucntion for elaborate inout data form webapp ###################################
+
+# Data preparation
+def preparazione(dati_originali):
+    dati_pronti = sc.fit_transform(dati_originali)
+    return dati_pronti
+
+# Predicitng the results
+def predict(dati):
+    previsione = knn.predict(dati)
+    return previsione
+
+
+
+
+##################################################################################################
+
+
+# Creating API ################################################################################
 
 # Creating class for validation
 class Heart(BaseModel):
@@ -34,34 +92,6 @@ class Heart(BaseModel):
     Serum_Sodium: int
     Woman_Man: int
     Time: int
-
-# Creating std scaler
-sc = StandardScaler()
-
-# Loading the model saved
-
-model = keras.models.load_model("Test_model_Neural_Network")
-
-# List for prediction
-pred_label = list()
-
-# Defining data preparation
-def preparazione(dati_originali):
-    dati_pronti = dati_originali.values
-    dati_pronti = sc.fit_transform(dati_originali)
-    return dati_pronti
-
-# Defining function for prediction
-def predict(dati):
-    previsione = model.predict(dati)
-    return previsione
-
-# Defining method for converting results
-def convert(dati_preparati, lista):
-    for i in range(len(dati_preparati)):
-        result = pred_label.append(np.argmax(dati_preparati[i]))
-
-    return result
 
 app = FastAPI()
 
@@ -78,11 +108,10 @@ async def get_prediction(heart :Heart):
     # input_df = pd.DataFrame([heart.dict()])
     dati_preparati = preparazione(input_df)
     prediction_heart = predict(dati_preparati)
-    prediction_label = convert(prediction_heart, pred_label)
-    return JSONResponse(content=prediction_label)
-    # return prediction_label
+    #prediction_label = convert(prediction_heart, pred_label)
+    #return JSONResponse(content=prediction_label)
+    return prediction_heart
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8000)    
-
-
+    uvicorn.run(app, host='127.0.0.1', port=8000)  
+#####################################################################################################
